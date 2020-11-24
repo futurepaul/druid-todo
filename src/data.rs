@@ -76,12 +76,10 @@ impl TodoItem {
     }
 
     pub fn select(ctx: &mut EventCtx, data: &mut Self, _env: &Env) {
-        dbg!("clicked select");
         if !data.selected {
             ctx.submit_command(SELECT.with(data.id));
             ctx.request_focus();
         }
-        // data.selected = true;
     }
 
     fn render(text: &str, done: bool) -> RichText {
@@ -124,9 +122,14 @@ pub struct AppState {
 }
 
 impl AppState {
-    pub fn add_todo(_ctx: &mut EventCtx, data: &mut Self, _env: &Env) {
-        data.todos.push_back(TodoItem::new(&data.new_todo));
-        data.save_to_json().unwrap();
+    pub fn click_add(_ctx: &mut EventCtx, data: &mut Self, _env: &Env) {
+        data.add_todo();
+    }
+
+    pub fn add_todo(&mut self) {
+        self.todos.push_front(TodoItem::new(&self.new_todo));
+        self.new_todo = String::new();
+        self.save_to_json().unwrap();
     }
 
     pub fn load_from_json() -> Self {
@@ -163,7 +166,17 @@ impl AppState {
         Ok(())
     }
 
-    pub fn click_save(_ctx: &mut EventCtx, data: &mut Self, _env: &Env) {
+    pub fn clear_completed(_ctx: &mut EventCtx, data: &mut Self, _env: &Env) {
+        // TODO: can I get rid of this clone?
+        let new_todos: Vector<TodoItem> = data
+            .todos
+            .iter()
+            .cloned()
+            .filter(|item| !item.done)
+            .collect();
+
+        data.todos = new_todos;
+
         data.save_to_json().unwrap();
     }
 }

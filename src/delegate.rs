@@ -14,7 +14,6 @@ impl AppDelegate<AppState> for Delegate {
         _env: &Env,
     ) -> Handled {
         if let Some(id) = cmd.get(SELECT) {
-            dbg!("selecting...");
             data.selected = Some(id.clone());
             for todo in data.todos.iter_mut() {
                 if id == &todo.id {

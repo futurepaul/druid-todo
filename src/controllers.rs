@@ -4,6 +4,28 @@ use druid::{
 };
 
 use crate::data::*;
+
+pub struct AddTodoController;
+
+impl<W: Widget<AppState>> Controller<AppState, W> for AddTodoController {
+    fn event(
+        &mut self,
+        child: &mut W,
+        ctx: &mut EventCtx,
+        event: &Event,
+        data: &mut AppState,
+        env: &Env,
+    ) {
+        match event {
+            Event::KeyDown(k_e) if HotKey::new(None, KbKey::Enter).matches(k_e) => {
+                data.add_todo();
+                ctx.set_handled();
+            }
+            _ => {}
+        }
+        child.event(ctx, event, data, env);
+    }
+}
 pub struct TodoItemController;
 
 impl Controller<TodoItem, Either<TodoItem>> for TodoItemController {
