@@ -1,14 +1,14 @@
 use druid::{
-    im::Vector,
-    lens,
     theme::*,
     widget::Painter,
     widget::{Button, Checkbox, Either, Flex, List, RawLabel, TextBox},
-    LensExt, RenderContext, Widget, WidgetExt,
+    Insets, RenderContext, Widget, WidgetExt,
 };
 
 use crate::data::*;
 use crate::double_click::DoubleClick;
+
+use crate::controllers::TodoItemController;
 
 pub fn todo_item() -> impl Widget<TodoItem> {
     let painter = Painter::new(move |ctx, data: &TodoItem, env| {
@@ -31,21 +31,18 @@ pub fn todo_item() -> impl Widget<TodoItem> {
 
     let label = RawLabel::new()
         //TODO: find a better way to match textbox's padding
-        .padding((-2., 0., 0., -2.))
+        .padding(Insets::new(-2., 0., -2., 0.))
         .lens(TodoItem::rendered);
 
-    let save_button = Button::new("Save").on_click(TodoItem::save);
     let text_box = TextBox::new()
         .lens(TodoItem::text)
         .expand_width()
-        .env_scope(|env, data| {
+        .env_scope(|env, _data| {
             env.set(TEXTBOX_INSETS, 0.);
             env.set(TEXTBOX_BORDER_WIDTH, 0.)
         });
 
-    let edit_label = Flex::row()
-        .with_flex_child(text_box, 1.)
-        .with_child(save_button);
+    let edit_label = Flex::row().with_flex_child(text_box, 1.);
 
     let either = Either::new(
         |data, _env| data.selected && data.editing,

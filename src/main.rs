@@ -8,6 +8,11 @@ use data::*;
 mod view;
 use view::*;
 
+mod delegate;
+use delegate::Delegate;
+
+mod controllers;
+
 pub fn main() {
     let main_window = WindowDesc::new(build_ui)
         .title("Todo")
