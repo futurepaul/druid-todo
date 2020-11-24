@@ -8,7 +8,7 @@ use druid::{
 
 use crate::{
     controllers::{AddTodoController, TodoItemController},
-    data::*,
+    data::{AppState, TodoItem},
     double_click::DoubleClick,
 };
 

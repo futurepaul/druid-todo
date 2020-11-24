@@ -3,10 +3,10 @@ use druid::{AppLauncher, WindowDesc};
 mod double_click;
 
 mod data;
-use data::*;
+use data::AppState;
 
 mod view;
-use view::*;
+use view::build_ui;
 
 mod delegate;
 use delegate::Delegate;

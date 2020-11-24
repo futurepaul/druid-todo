@@ -1,6 +1,6 @@
 use druid::{AppDelegate, Command, DelegateCtx, Env, Handled, Target};
 
-use crate::data::*;
+use crate::data::{AppState, REBUILD, SAVE, SELECT, UNSELECT};
 
 pub struct Delegate;
 
@@ -24,7 +24,6 @@ impl AppDelegate<AppState> for Delegate {
             }
             Handled::Yes
         } else if let Some(id) = cmd.get(UNSELECT) {
-            dbg!("unselecting...");
             data.selected = None;
             for todo in data.todos.iter_mut() {
                 if id == &todo.id {
